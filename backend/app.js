@@ -6,6 +6,10 @@ import logger from 'morgan'
 import { fileURLToPath } from 'url'
 import indexRouter from './routes/index.js'
 import usersRouter from './routes/users.js'
+import typesRouter from './routes/types.js'
+import locationsRouter from './routes/locations.js'
+import cors from 'cors'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = join(__filename, '..')
 
@@ -15,14 +19,17 @@ const app = express()
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'jade')
 
+app.use(cors())
 app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(static_(join(__dirname, 'public')))
 
-app.use('/', indexRouter)
+app.use('/login', indexRouter)
 app.use('/users', usersRouter)
+app.use('/types', typesRouter)
+app.use('/locations', locationsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
