@@ -20,15 +20,41 @@ class Location {
     }
   }
 
-  async getLocationById (req, res) {
-    const { id } = req.params
+  async getLocation (req, res) {
+    const { param } = req.params
+
     try {
-      const location = await prisma.location.findUnique({
-        where: {
-          id: parseInt(id)
+      let location
+
+      if (!isNaN(param)) {
+        location = await prisma.location.findUnique({
+          where: {
+            id: parseInt(param)
+          }
+        })
+      } else {
+        const typeExist = await prisma.type.findUnique({
+          where: {
+            name: param
+          }
+        })
+
+        if (!typeExist) {
+          return res.status(404).json({ code: 404, error: 'Type not found' })
         }
-      })
-      if (!location) return res.status(404).json({ code: 404, error: 'Location not found' })
+
+        location = await prisma.location.findMany({
+          where: {
+            typeId: typeExist.id
+          }
+        })
+
+        return res.status(200).json({ code: 200, location })
+      }
+
+      if (!location) {
+        return res.status(404).json({ code: 404, error: 'Location not found' })
+      }
 
       return res.status(200).json(location)
     } catch (error) {

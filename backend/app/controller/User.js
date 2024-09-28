@@ -4,7 +4,6 @@ import { LoginValidation } from '../validations/LoginValidation.js'
 class User {
   async login (req, res) {
     try {
-      console.log(req.body)
       const validations = LoginValidation.safeParse(req.body)
       if (!validations.success) {
         // Extraemos el primer mensaje de error desde issues

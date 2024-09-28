@@ -5,7 +5,7 @@ const router = Router()
 const locationController = new Location()
 
 router.get('/', locationController.getLocations)
-router.get('/:id', locationController.getLocationById)
+router.get('/:param', locationController.getLocation)
 router.post('/', locationController.saveLocation)
 
 export default router

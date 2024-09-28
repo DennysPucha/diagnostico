@@ -4,8 +4,6 @@ class Api{
 
   static Future<String> login (String email, String password) async {
     try {
-      print({'email': email, 'password': password});
-
       final response = await http.post(Uri.parse('${baseUrl}login'),headers: {
       'Accept': 'application/json'
     }, body: {
@@ -31,6 +29,15 @@ class Api{
 
   static Future<String> getLocations () async {
     final response = await http.get(Uri.parse('${baseUrl}locations'));
+    if (response.statusCode == 200){
+      return response.body;
+    } else {
+      return 'Error';
+    }
+  }
+
+  static Future<String> getLocationsbyName (String name) async {
+    final response = await http.get(Uri.parse('${baseUrl}locations/$name'));
     if (response.statusCode == 200){
       return response.body;
     } else {
